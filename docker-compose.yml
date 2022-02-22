@@ -3,9 +3,10 @@ services:
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.7.0
+    restart: always
+    container_name: elasticsearch
     ports:
       - "9200:9200"
-      - "9300:9300"
     environment:
       discovery.type: "single-node"
       ES_JAVA_OPTS: "-Xms2g -Xmx2g"
@@ -14,14 +15,47 @@ services:
       - ./esdata:/usr/share/elasticsearch/data
 
   kibana:
+    restart: always
     image: docker.elastic.co/kibana/kibana:7.7.0
+    container_name: kibana
     ports:
       - "5601:5601"
     environment:
       ELASTICSEARCH_URL: http://elasticsearch:9200
     depends_on:
-      - elasticsearch
+      - "elasticsearch"
+
+  api:
+    container_name: spring-elastic-stack_api
+    restart: always
+    build:
+      dockerfile: api/Dockerfile
+      context: .
+    image: helgardh/spring-elastic-stack:latest
+    environment:
+      - "SPRING_PROFILES_ACTIVE=prod"
+    volumes:
+      - api_data:/usr/local/spring_elastic_stack
+    depends_on:
+      - "elasticsearch"
+      - "kibana"
+
+  portainer:
+    container_name: portainer
+    image: portainer/portainer
+    command: -H unix:///var/run/docker.sock
+    restart: always
+    ports:
+      - "9000:9000"
+      - "8000:8000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
 
 volumes:
   esdata:
+    driver: local
+  api_data:
+    driver: local
+  portainer_data:
     driver: local
