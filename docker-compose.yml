@@ -29,7 +29,7 @@ services:
     container_name: spring-elastic-stack_api
     restart: always
     build:
-      dockerfile: api/Dockerfile
+      dockerfile: config/api/Dockerfile
       context: .
     image: helgardh/spring-elastic-stack:latest
     environment:

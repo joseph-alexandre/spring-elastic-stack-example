@@ -26,7 +26,6 @@ public class ElasticSearchConfig {
 
     @Bean
     public RestHighLevelClient client() {
-        log.info(MessageFormat.format("URL ELASTIC:: ----------- {0}:{1}", host, port));
         ClientConfiguration clientConfiguration
                 = ClientConfiguration.builder()
                 .connectedTo(MessageFormat.format("{0}:{1}", host, port))
