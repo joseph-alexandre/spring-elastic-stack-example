@@ -11,7 +11,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 @Getter
 @Setter
 @EqualsAndHashCode
-@Document(indexName = "users")
+@Document(indexName = "persons")
 public class Person {
 
     @Id

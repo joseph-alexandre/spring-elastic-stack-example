@@ -1,5 +1,6 @@
 package br.com.helgardh.springelasticstack.infra.database.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +13,7 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
 
 import java.text.MessageFormat;
 
+@Slf4j
 @Configuration
 @EnableElasticsearchRepositories(basePackages = "br.com.helgardh.springelasticstack.infra.database.repository")
 public class ElasticSearchConfig {
@@ -23,7 +25,8 @@ public class ElasticSearchConfig {
     private String port;
 
     @Bean
-    public RestHighLevelClient client() throws Exception {
+    public RestHighLevelClient client() {
+        log.info(MessageFormat.format("URL ELASTIC:: ----------- {0}:{1}", host, port));
         ClientConfiguration clientConfiguration
                 = ClientConfiguration.builder()
                 .connectedTo(MessageFormat.format("{0}:{1}", host, port))
@@ -33,7 +36,7 @@ public class ElasticSearchConfig {
     }
 
     @Bean
-    public ElasticsearchOperations elasticsearchTemplate() throws Exception {
+    public ElasticsearchOperations elasticsearchTemplate() {
         return new ElasticsearchRestTemplate(client());
     }
 }
