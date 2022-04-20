@@ -1,6 +1,11 @@
 pipeline {
     agent any
     stages {
+        stage("Limpeza dos containers"){
+            steps {
+                sh 'docker system prune -a --volumes -f'
+            }
+        }
         stage("Build da aplicação"){
             steps {
                 sh 'mvn clean package -DskipTests=true'
@@ -8,7 +13,8 @@ pipeline {
         }
         stage("Subindo a aplicação.") {
             steps {
-                sh 'docker compose up --build --force-recreate'
+                sh 'docker compose up --build --force-recreate --no-color --wait'
+                sh 'docker compose ps'
             }
         }
     }
