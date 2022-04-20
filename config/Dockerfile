@@ -7,5 +7,4 @@ WORKDIR $APP_HOME
 
 ADD ../target/*.jar ./api.jar
 
-EXPOSE 8081
 CMD ["java","-jar", "api.jar"]
