@@ -54,5 +54,3 @@ volumes:
     driver: local
   api_data:
     driver: local
-  portainer_data:
-    driver: local
