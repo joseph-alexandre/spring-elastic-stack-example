@@ -10,6 +10,6 @@ public class StatusController {
 
     @GetMapping
     public String getStatus(){
-        return "I'm alive!";
+        return "I'm fucking alive!!!!!";
     }
 }
