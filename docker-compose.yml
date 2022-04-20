@@ -1,4 +1,4 @@
-version: '3.7'
+version: '3.8'
 services:
 
   elasticsearch:
@@ -13,6 +13,11 @@ services:
       xpack.monitoring.enabled: "true"
     volumes:
       - ./esdata:/usr/share/elasticsearch/data
+    healthcheck:
+      test: curl -s http://elasticsearch:9200 >/dev/null || exit 1
+      interval: 10s
+      timeout: 15s
+      retries: 3
 
   kibana:
     restart: always
@@ -29,28 +34,19 @@ services:
     container_name: spring-elastic-stack_api
     restart: always
     build:
-      dockerfile: api/Dockerfile
+      dockerfile: config/Dockerfile
       context: .
-    image: helgardh/spring-elastic-stack:latest
+    ports:
+      - "8091:8091"
     environment:
       - "SPRING_PROFILES_ACTIVE=prod"
     volumes:
       - api_data:/usr/local/spring_elastic_stack
     depends_on:
-      - "elasticsearch"
-      - "kibana"
+      elasticsearch:
+        condition: service_healthy
 
-  portainer:
-    container_name: portainer
-    image: portainer/portainer
-    command: -H unix:///var/run/docker.sock
-    restart: always
-    ports:
-      - "9000:9000"
-      - "8000:8000"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - portainer_data:/data
+
 
 volumes:
   esdata:

@@ -1,0 +1,15 @@
+pipeline {
+    agent any
+    stages {
+        stage("Build da aplicação"){
+            steps {
+                sh 'mvn clean package -DskipTests=true'
+            }
+        }
+        stage("Subindo a aplicação.") {
+            steps {
+                sh 'docker compose up --build --force-recreate'
+            }
+        }
+    }
+}
