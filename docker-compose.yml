@@ -42,7 +42,7 @@ services:
     environment:
       - "SPRING_PROFILES_ACTIVE=prod"
     volumes:
-      - api_data:/usr/local/spring_elastic_stack
+      - api_data:/var/lib/spring_elastic_stack
     depends_on:
       elasticsearch:
         condition: service_healthy
