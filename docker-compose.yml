@@ -28,7 +28,8 @@ services:
     environment:
       ELASTICSEARCH_URL: http://elasticsearch:9200
     depends_on:
-      - "elasticsearch"
+      elasticsearch:
+        condition: service_healthy
 
   api:
     container_name: spring-elastic-stack_api
